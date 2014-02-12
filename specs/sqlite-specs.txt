@@ -1,0 +1,91 @@
+CREATE TABLE articles(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  article_no INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  type TEXT,
+  tax_rate INT NOT NULL,
+  gross DECIMAL(16,2),
+  comment TEXT,
+  last_modified INTEGER NOT NULL,
+  active BOOLEAN DEFAULT TRUE
+);
+
+-- Rechnungsadresse vs Lieferadresse(n)?
+CREATE TABLE customers(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  customer_no INTEGER NOT NULL,
+  company TEXT,
+  honorific TEXT,
+  last_name TEXT,
+  first_name TEXT,
+  street TEXT NOT NULL,
+  zip TEXT NOT NULL,
+  city TEXT NOT NULL,
+  country TEXT,
+  phone TEXT,
+  email TEXT,
+  tax_no TEXT,
+  comment TEXT,
+  pgp_id TEXT,
+  last_modified INTEGER NOT NULL,
+  active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE company_data(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_name TEXT NOT NULL,
+  street TEXT NOT NULL,
+  zip TEXT NOT NULL,
+  city TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  mobile TEXT,
+  website TEXT,
+  email TEXT,
+  bank_iban TEXT NOT NULL,
+  bank_bic TEXT NOT NULL,
+  bank_name TEXT NOT NULL,
+  tax_no TEXT NOT NULL,
+  pgp_id TEXT,
+  last_modified INTEGER NOT NULL,
+  active BOOLEAN DEFAULT TRUE
+);
+
+-- Locking von fertigen Rechnungen
+-- isPaid BOOLEAN
+CREATE TABLE invoice(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  invoice_no INTEGER NOT NULL,
+  invoice_date INTEGER NOT NULL,
+  customer_id INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  company_data INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  payment_due INTEGER NOT NULL,
+  comment TEXT,
+  last_modified INTEGER NOT NULL,
+  active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE invoice_elements(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  invoice_no INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  invoice_element INTEGER NOT NULL, -- Sortierung auf der Rechnung, Schönerer Name?
+  article_id INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  amount INTEGER NOT NULL,
+  comment TEXT,
+  last_modified INTEGER NOT NULL,
+  active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE invoice_payments(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  invoice_no INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  payment_amount DECIMAL(16,2),
+  payment_date INTEGER,
+  comment TEXT,
+  last_modified INTEGER NOT NULL,
+  active BOOLEAN DEFAULT TRUE
+);
+
+-- Lieferscheine?
+-- Storno?
+-- Rückwirkend Rechnungen schreiben?

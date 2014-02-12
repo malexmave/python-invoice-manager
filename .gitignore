@@ -1,0 +1,6 @@
+*.sublime*
+*.pyc
+*.pyo
+*.csv
+*.tex
+*.pdf

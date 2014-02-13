@@ -2,10 +2,10 @@ CREATE TABLE articles(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   article_no INTEGER NOT NULL,
   name TEXT NOT NULL,
-  description TEXT,
-  type TEXT,
+  description TEXT NOT NULL,
+  article_type TEXT,
   tax_rate INT NOT NULL,
-  gross DECIMAL(16,2),
+  gross DECIMAL(16,2) NOT NULL,
   comment TEXT,
   last_modified INTEGER NOT NULL,
   active BOOLEAN DEFAULT TRUE
@@ -27,9 +27,8 @@ CREATE TABLE customers(
   email TEXT,
   tax_no TEXT,
   comment TEXT,
-  pgp_id TEXT,
   last_modified INTEGER NOT NULL,
-  active BOOLEAN DEFAULT TRUE
+  active BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 -- TODO: Logo als BLOB abspeichern?
@@ -48,9 +47,8 @@ CREATE TABLE company_data(
   bank_name TEXT NOT NULL,
   tax_no TEXT NOT NULL,
   currency TEXT NOT NULL,
-  pgp_id TEXT,
   last_modified INTEGER NOT NULL,
-  active BOOLEAN DEFAULT TRUE
+  active BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 -- TODO: Locking von fertigen Rechnungen

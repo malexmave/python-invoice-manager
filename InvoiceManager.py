@@ -1,9 +1,9 @@
 import unittest
-import tests.data
+import tests.datatest
 
 def suite():
 	suite = unittest.TestSuite()
-	suite.addTest(tests.data.suite())
+	suite.addTest(tests.datatest.suite())
 	return suite
 
 def main():

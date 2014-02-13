@@ -1,0 +1,29 @@
+Hooks
+
+A list of planned hooks that should be implemented.
+This list is not exhaustive, and several things still need to be defined,
+for example the exact cases in which a hook is called, the order in case
+more than one hook is called, the parameters they will be called with,
+and the handling of the return values.
+
+# Program Cycle
+ON_STARTUP
+ON_SHUTDOWN
+
+# Company data management
+BEFORE_COMPANY_EDIT_SAVED
+AFTER_COMPANY_EDIT_SAVED
+
+# Customer management
+BEFORE_NEW_CUSTOMER_SAVED
+AFTER_NEW_CUSTOMER_SAVED
+BEFORE_CUSTOMER_EDIT_SAVED
+AFTER_CUSTOMER_EDIT_SAVED
+
+# Invoice management
+BEFORE_NEW_INVOICE_SAVED
+AFTER_NEW_INVOICE_SAVED
+BEFORE_INVOICE_EDIT_SAVED
+AFTER_INVOICE_EDIT_SAVED
+BEFORE_INVOICE_FINALIZED
+AFTER_INVOICE_FINALIZED

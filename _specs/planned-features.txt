@@ -1,0 +1,17 @@
+Planned features
+
+This file is, at the moment, more of a reminder to myself about the features I
+want to implement. Inclusion in this file does not mean that a feature will
+actually happen, it only means that I am looking into it.
+
+Possible features:
+* Hooks
+* Plugin-Infrastructure
+* curses-GUI (instead of only text-based)
+* GTK-GUI (in addition to curses / text-based, for later versions)
+
+Possible plugins:
+* Deutsche Post Internetmarke (automatically purchase a postage stamp and 
+  integrate it into the output file)
+  * This is somewhat unlikely at the moment, as their API is very badly
+    documented.

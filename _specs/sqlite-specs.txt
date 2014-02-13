@@ -11,7 +11,7 @@ CREATE TABLE articles(
   active BOOLEAN DEFAULT TRUE
 );
 
--- Rechnungsadresse vs Lieferadresse(n)?
+-- TODO: Rechnungsadresse vs Lieferadresse(n)?
 CREATE TABLE customers(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   customer_no INTEGER NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE customers(
   active BOOLEAN DEFAULT TRUE
 );
 
--- Logo als BLOB abspeichern?
+-- TODO: Logo als BLOB abspeichern?
 CREATE TABLE company_data(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   company_name TEXT NOT NULL,
@@ -53,14 +53,14 @@ CREATE TABLE company_data(
   active BOOLEAN DEFAULT TRUE
 );
 
--- Locking von fertigen Rechnungen
--- isPaid BOOLEAN
+-- TODO: Locking von fertigen Rechnungen
+-- TODO: isPaid BOOLEAN
 CREATE TABLE invoice(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   invoice_no INTEGER NOT NULL,
   invoice_date INTEGER NOT NULL,
-  customer_id INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
-  company_data INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  customer_id INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
+  company_data INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
   payment_due INTEGER NOT NULL,
   comment TEXT,
   finalized BOOLEAN NOT NULL,
@@ -70,9 +70,9 @@ CREATE TABLE invoice(
 
 CREATE TABLE invoice_elements(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
-  invoice_no INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
-  invoice_element INTEGER NOT NULL, -- Sortierung auf der Rechnung, Schönerer Name?
-  article_id INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  invoice_no INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
+  invoice_element INTEGER NOT NULL, -- TODO: Sortierung auf der Rechnung, Schönerer Name?
+  article_id INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
   amount INTEGER NOT NULL,
   comment TEXT,
   last_modified INTEGER NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE invoice_elements(
 
 CREATE TABLE invoice_payments(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
-  invoice_no INTEGER NOT NULL, -- Consistency check necessary, convert to FK?
+  invoice_no INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
   payment_amount DECIMAL(16,2),
   payment_date INTEGER,
   comment TEXT,
@@ -89,6 +89,6 @@ CREATE TABLE invoice_payments(
   active BOOLEAN DEFAULT TRUE
 );
 
--- Lieferscheine?
--- Storno?
--- Rückwirkend Rechnungen schreiben?
+-- TODO: Lieferscheine?
+-- TODO: Storno?
+-- TODO: Rückwirkend Rechnungen schreiben?

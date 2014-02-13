@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import copy
 import unittest
 
 import data.datatype
@@ -68,16 +68,28 @@ class InvoiceDataInteractions(unittest.TestCase):
 
 class ArticleType(unittest.TestCase):
 	def setUp(self):
-		self.template = {"ID": 1, \
-		    "article_no": 1, \
-		    "name": "Hurpdurp", \
-		    "description": "Herp and Derp", \
-		    "article_type": "Service", \
-		    "tax_rate": 19, \
-		    "gross": 20, \
-		    "comment": "This is a comment", \
-		    "last_modified": 3,\
-		    "active": True}
+		self.template = {"ID": 1, 
+			"article_no": 1, 
+			"name": "Hurpdurp", 
+			"description": "Herp and Derp", 
+			"article_type": "Service", 
+			"tax_rate": 19, 
+			"gross": 20, 
+			"comment": "This is a comment", 
+			"last_modified": 3,
+			"active": True
+		}
+		self.getters = {
+			"ID": data.datatype.Article.getPersistentID,
+			"article_no": data.datatype.Article.getArticleNumber,
+			"name": data.datatype.Article.getName,
+			"description": data.datatype.Article.getDescription,
+			"article_type": data.datatype.Article.getArticleType,
+			"tax_rate": data.datatype.Article.getTaxRate,
+			"gross": data.datatype.Article.getGrossPrice,
+			"comment": data.datatype.Article.getComment,
+			"active": data.datatype.Article.isActive
+		}
 
 	def testArticleGeneration(self):
 		try:
@@ -97,46 +109,55 @@ class ArticleType(unittest.TestCase):
 
 	def testArticleGetters(self):
 		article = data.datatype.Article(self.template)
-		self.assertEqual(self.template["ID"], article.getPersistentID(), "ID getter failed")
-		self.assertEqual(self.template["article_no"], article.getArticleNumber(), "article_no getter failed")
-		self.assertEqual(self.template["name"], article.getName(), "name getter failed")
-		self.assertEqual(self.template["description"], article.getDescription(), "description getter failed")
-		self.assertEqual(self.template["article_type"], article.getArticleType(), "article_type getter failed")
-		self.assertEqual(self.template["tax_rate"], article.getTaxRate(), "tax_rate getter failed")
-		self.assertEqual(self.template["gross"], article.getGrossPrice(), "gross getter failed")
-		self.assertEqual(self.template["comment"], article.getComment(), "comment getter failed")
-		self.assertEqual(self.template["active"], article.isActive(), "active getter failed")
+		for key in self.getters:
+			self.assertEqual(self.template[key], self.getters[key](article), \
+				"%s getter failed: Expected %s, but got %s" % \
+				(key, str(self.template[key]), str(self.getters[key](article))))
 
 	def testReferenceBreak(self):
 		article = data.datatype.Article(self.template)
-		self.template["article_type"] = None
-		self.assertEqual("Service", article.getArticleType(), "Error: State not disjointed")
-
-	def testMutabilityByGetter(self):
-		article = data.datatype.Article(self.template)
-		temp = article.getPersistentID()
-		temp = 3
-		self.assertEqual(self.template["ID"], article.getPersistentID(), "Error: State mutable")
+		for key in self.getters:
+			oldvar = copy.deepcopy(self.template[key])
+			self.template[key] = None
+			self.assertEqual(oldvar, self.getters[key](article), "%s: unbroken reference.")
 
 
 class CompanyType(unittest.TestCase):
 	def setUp(self):
-		self.template = {"ID": 2, \
-			"company_name": "Herpderp",\
-			"street": "Wonderstreet 1337",\
-			"zip": "31337",\
-			"city": "L33thaven",\
-			"phone": "+1 292992 666 42",\
-			"mobile": "+1 424242424242",\
-			"website": "31337company.com",\
-			"email": "42@31337company.com",\
-			"bank_iban": "LOL3313374242666",\
-			"bank_bic": "TROLLFACEXX",\
-			"bank_name": "Gotham City Bank",\
-			"tax_no": "31 337 424242",\
-			"currency": "€",\
-			"last_modified": 31337,\
-			"active": True}
+		self.template = {"ID": 2, 
+			"company_name": "Herpderp",
+			"street": "Wonderstreet 1337",
+			"zip": "31337",
+			"city": "L33thaven",
+			"phone": "+1 292992 666 42",
+			"mobile": "+1 424242424242",
+			"website": "31337company.com",
+			"email": "42@31337company.com",
+			"bank_iban": "LOL3313374242666",
+			"bank_bic": "TROLLFACEXX",
+			"bank_name": "Gotham City Bank",
+			"tax_no": "31 337 424242",
+			"currency": "€",
+			"last_modified": 31337,
+			"active": True
+		}
+		self.getters = {
+			"ID": data.datatype.Company.getPersistentID,
+			"company_name":data.datatype.Company.getName,
+			"street":data.datatype.Company.getStreet,
+			"zip":data.datatype.Company.getZIP,
+			"city":data.datatype.Company.getCity,
+			"phone":data.datatype.Company.getPhone,
+			"mobile":data.datatype.Company.getMobile,
+			"website":data.datatype.Company.getWebsite,
+			"email":data.datatype.Company.getEmail,
+			"bank_iban":data.datatype.Company.getIBAN,
+			"bank_bic":data.datatype.Company.getBIC,
+			"bank_name":data.datatype.Company.getBankName,
+			"tax_no":data.datatype.Company.getTaxNo,
+			"currency":data.datatype.Company.getCurrency,
+			"active":data.datatype.Company.isActive
+		}
 
 	def testCompanyGeneration(self):
 		try:
@@ -156,31 +177,17 @@ class CompanyType(unittest.TestCase):
 
 	def testCompanyGetters(self):
 		company = data.datatype.Company(self.template)
-		self.assertEqual(self.template["ID"], company.getPersistentID(), "ID getter failed")
-		self.assertEqual(self.template["company_name"], company.getName(), "company_name getter failed")
-		self.assertEqual(self.template["street"], company.getStreet(), "street getter failed")
-		self.assertEqual(self.template["zip"], company.getZIP(), "zip getter failed")
-		self.assertEqual(self.template["city"], company.getCity(), "city getter failed")
-		self.assertEqual(self.template["phone"], company.getPhone(), "phone getter failed")
-		self.assertEqual(self.template["mobile"], company.getMobile(), "mobile getter failed")
-		self.assertEqual(self.template["website"], company.getWebsite(), "website getter failed")
-		self.assertEqual(self.template["email"], company.getEmail(), "email getter failed")
-		self.assertEqual(self.template["bank_iban"], company.getIBAN(), "bank_iban getter failed")
-		self.assertEqual(self.template["bank_bic"], company.getBIC(), "bank_bic getter failed")
-		self.assertEqual(self.template["bank_name"], company.getBankName(), "bank_name getter failed")
-		self.assertEqual(self.template["currency"], company.getCurrency(), "currency getter failed")
-		self.assertEqual(self.template["active"], company.isActive(), "active getter failed")
+		for key in self.getters:
+			self.assertEqual(self.template[key], self.getters[key](company), \
+				"%s getter failed: Expected %s, but got %s" % \
+				(key, str(self.template[key]), str(self.getters[key](company))))
 
 	def testReferenceBreak(self):
 		company = data.datatype.Company(self.template)
-		self.template["mobile"] = None
-		self.assertEqual("+1 424242424242", company.getMobile(), "Error: State not disjointed")
-
-	def testMutabilityByGetter(self):
-		company = data.datatype.Company(self.template)
-		temp = company.getPersistentID()
-		temp = 3
-		self.assertEqual(self.template["ID"], company.getPersistentID(), "Error: State mutable")
+		for key in self.getters:
+			oldvar = copy.deepcopy(self.template[key])
+			self.template[key] = None
+			self.assertEqual(oldvar, self.getters[key](company), "%s: unbroken reference.")
 
 
 def suite():

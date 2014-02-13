@@ -47,6 +47,7 @@ CREATE TABLE company_data(
   bank_bic TEXT NOT NULL,
   bank_name TEXT NOT NULL,
   tax_no TEXT NOT NULL,
+  currency TEXT NOT NULL,
   pgp_id TEXT,
   last_modified INTEGER NOT NULL,
   active BOOLEAN DEFAULT TRUE

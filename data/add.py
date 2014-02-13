@@ -1,6 +1,6 @@
 from data import connect
 
-def User(): # TODO: Parameters
+def Customer(): # TODO: Parameters
 	conn = connect.getConnection()
 	pass
 

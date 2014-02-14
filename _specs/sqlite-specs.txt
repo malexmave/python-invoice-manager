@@ -52,25 +52,25 @@ CREATE TABLE company_data(
 );
 
 -- TODO: Locking von fertigen Rechnungen
--- TODO: isPaid BOOLEAN
 CREATE TABLE invoice(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   invoice_no INTEGER NOT NULL,
   invoice_date INTEGER NOT NULL,
-  customer_id INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
-  company_data INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
+  customer_id INTEGER NOT NULL REFERENCES customers(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  company_id INTEGER NOT NULL REFERENCES company_data(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   payment_due INTEGER NOT NULL,
   comment TEXT,
   finalized BOOLEAN NOT NULL,
+  paid BOOLEAN DEFAULT FALSE NOT NULL,
   last_modified INTEGER NOT NULL,
   active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE invoice_elements(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
-  invoice_no INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
-  invoice_element INTEGER NOT NULL, -- TODO: Sortierung auf der Rechnung, Schönerer Name?
-  article_id INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
+  invoice_no INTEGER NOT NULL REFERENCES invoice(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  invoice_element INTEGER NOT NULL,
+  article_id INTEGER NOT NULL REFERENCES articles(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   amount INTEGER NOT NULL,
   comment TEXT,
   last_modified INTEGER NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE invoice_elements(
 
 CREATE TABLE invoice_payments(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
-  invoice_no INTEGER NOT NULL, -- TODO: Consistency check necessary, convert to FK?
+  invoice_no INTEGER NOT NULL REFERENCES invoice(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   payment_amount DECIMAL(16,2),
   payment_date INTEGER,
   comment TEXT,

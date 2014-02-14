@@ -108,14 +108,20 @@ class ArticleType(unittest.TestCase):
 
 
 	def testArticleGetters(self):
-		article = data.datatype.Article(self.template)
+		try:
+			article = data.datatype.Article(self.template)
+		except AssertionError:
+			self.fail("Generation of Article Object failed.")
 		for key in self.getters:
 			self.assertEqual(self.template[key], self.getters[key](article), \
 				"%s getter failed: Expected %s, but got %s" % \
 				(key, str(self.template[key]), str(self.getters[key](article))))
 
 	def testReferenceBreak(self):
-		article = data.datatype.Article(self.template)
+		try:
+			article = data.datatype.Article(self.template)
+		except AssertionError:
+			self.fail("Generation of Article Object failed.")
 		for key in self.getters:
 			oldvar = copy.deepcopy(self.template[key])
 			self.template[key] = None
@@ -176,14 +182,20 @@ class CompanyType(unittest.TestCase):
 			pass
 
 	def testCompanyGetters(self):
-		company = data.datatype.Company(self.template)
+		try:
+			company = data.datatype.Company(self.template)
+		except AssertionError:
+			self.fail("Generation of company object failed")
 		for key in self.getters:
 			self.assertEqual(self.template[key], self.getters[key](company), \
 				"%s getter failed: Expected %s, but got %s" % \
 				(key, str(self.template[key]), str(self.getters[key](company))))
 
 	def testReferenceBreak(self):
-		company = data.datatype.Company(self.template)
+		try:
+			company = data.datatype.Company(self.template)
+		except AssertionError:
+			self.fail("Generation of company object failed")
 		for key in self.getters:
 			oldvar = copy.deepcopy(self.template[key])
 			self.template[key] = None

@@ -1,13 +1,7 @@
-import unittest
-import tests.datatest
-
-def suite():
-	suite = unittest.TestSuite()
-	suite.addTest(tests.datatest.suite())
-	return suite
+import nose
 
 def main():
-	unittest.main(defaultTest='suite')
+	nose.main(defaultTest='tests')
 
 if __name__ == '__main__':
 	main()

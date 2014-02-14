@@ -1,0 +1,2 @@
+Please have the following Python packages installed:
+nose # For unittests

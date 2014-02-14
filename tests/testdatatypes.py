@@ -7,7 +7,7 @@ import manage.article
 import manage.company
 import manage.customer
 import manage.invoice
-
+"""
 class ArticleDataInteractions(unittest.TestCase):
 	def testAddArticle(self):
 		self.failUnless(True)
@@ -65,7 +65,7 @@ class InvoiceDataInteractions(unittest.TestCase):
 
 	def testFinalizedInvoiceNotMutable(self):
 		self.failUnless(True)
-
+"""
 class ArticleType(unittest.TestCase):
 	def setUp(self):
 		self.template = {"ID": 1, 
@@ -200,14 +200,3 @@ class CompanyType(unittest.TestCase):
 			oldvar = copy.deepcopy(self.template[key])
 			self.template[key] = None
 			self.assertEqual(oldvar, self.getters[key](company), "%s: unbroken reference.")
-
-
-def suite():
-	suite = unittest.TestSuite()
-	suite.addTest(unittest.makeSuite(ArticleDataInteractions, 'test'))
-	suite.addTest(unittest.makeSuite(CompanyDataInteractions, 'test'))
-	suite.addTest(unittest.makeSuite(CustomerDataInteractions, 'test'))
-	suite.addTest(unittest.makeSuite(InvoiceDataInteractions, 'test'))
-	suite.addTest(unittest.makeSuite(ArticleType, 'test'))
-	suite.addTest(unittest.makeSuite(CompanyType, 'test'))
-	return suite

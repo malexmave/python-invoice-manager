@@ -30,24 +30,30 @@ class ArticleType(unittest.TestCase):
 		}
 
 	def testArticleGeneration(self):
-		try:
-			data.datatype.Article(self.template)
-			self.template["article_type"] = None
-			self.template["comment"] = None
-			data.datatype.Article(self.template)
-		except AssertionError, e:
-			self.fail(str(e))
-		try:
-			self.template["ID"] = None
-			data.datatype.Article(self.template)
-			self.fail("ID == None, assertion failed.")
-		except AssertionError, e:
-			pass
+		allowedNone = ["article_type", "comment"]
+		for field in self.template:
+			rv = 0
+			try:
+				oldvar = copy.copy(self.template[field])
+				self.template[field] = None
+				data.datatype.Article(self.template)
+				if field not in allowedNone:
+					rv = 1
+			except AssertionError:
+				if field in allowedNone:
+					rv = 2
+			finally:
+				self.template[field] = oldvar
+				if rv == 1:
+					self.fail("%s = None accepted.")
+				if rv == 2:
+					self.fail("%s = None not accepted.")
 
 
 	def testArticleGetters(self):
 		try:
 			article = data.datatype.Article(self.template)
+			assert data.datatype.Herp().derp()
 		except AssertionError:
 			self.fail("Generation of Article Object failed.")
 		for key in self.getters:
@@ -87,37 +93,42 @@ class CompanyType(unittest.TestCase):
 		}
 		self.getters = {
 			"ID": data.datatype.Company.getPersistentID,
-			"company_name":data.datatype.Company.getName,
-			"street":data.datatype.Company.getStreet,
-			"zip":data.datatype.Company.getZIP,
-			"city":data.datatype.Company.getCity,
-			"phone":data.datatype.Company.getPhone,
-			"mobile":data.datatype.Company.getMobile,
-			"website":data.datatype.Company.getWebsite,
-			"email":data.datatype.Company.getEmail,
-			"bank_iban":data.datatype.Company.getIBAN,
-			"bank_bic":data.datatype.Company.getBIC,
-			"bank_name":data.datatype.Company.getBankName,
-			"tax_no":data.datatype.Company.getTaxNo,
-			"currency":data.datatype.Company.getCurrency,
-			"active":data.datatype.Company.isActive
+			"company_name": data.datatype.Company.getName,
+			"street": data.datatype.Company.getStreet,
+			"zip": data.datatype.Company.getZIP,
+			"city": data.datatype.Company.getCity,
+			"phone": data.datatype.Company.getPhone,
+			"mobile": data.datatype.Company.getMobile,
+			"website": data.datatype.Company.getWebsite,
+			"email": data.datatype.Company.getEmail,
+			"bank_iban": data.datatype.Company.getIBAN,
+			"bank_bic": data.datatype.Company.getBIC,
+			"bank_name": data.datatype.Company.getBankName,
+			"tax_no": data.datatype.Company.getTaxNo,
+			"currency": data.datatype.Company.getCurrency,
+			"active": data.datatype.Company.isActive
 		}
 
 	def testCompanyGeneration(self):
-		try:
-			data.datatype.Company(self.template)
-			self.template["mobile"] = None
-			self.template["website"] = None
-			self.template["email"] = None
-			data.datatype.Company(self.template)
-		except AssertionError, e:
-			self.fail(str(e))
-		try:
-			self.template["company_name"] = None
-			data.datatype.Company(self.template)
-			self.fail("Company Name = None accepted, assertions failed.")
-		except AssertionError, e:
-			pass
+		allowedNone = ["mobile", "website", "email"]
+		for field in self.template:
+			rv = 0
+			try:
+				oldvar = copy.copy(self.template[field])
+				self.template[field] = None
+				data.datatype.Company(self.template)
+				if field not in allowedNone:
+					rv = 1
+			except AssertionError:
+				if field in allowedNone:
+					rv = 2
+			finally:
+				self.template[field] = oldvar
+				if rv == 1:
+					self.fail("%s = None accepted.")
+				if rv == 2:
+					self.fail("%s = None not accepted.")
+
 
 	def testCompanyGetters(self):
 		try:

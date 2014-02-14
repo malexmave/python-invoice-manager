@@ -1,18 +1,17 @@
-CREATE TABLE articles(
+CREATE TABLE article(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   article_no INTEGER NOT NULL,
   name TEXT NOT NULL,
   description TEXT NOT NULL,
   article_type TEXT,
-  tax_rate INT NOT NULL,
+  tax_rate INTEGER NOT NULL,
   gross DECIMAL(16,2) NOT NULL,
   comment TEXT,
   last_modified INTEGER NOT NULL,
   active BOOLEAN DEFAULT TRUE
 );
 
--- TODO: Rechnungsadresse vs Lieferadresse(n)?
-CREATE TABLE customers(
+CREATE TABLE customer(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   customer_no INTEGER NOT NULL,
   company TEXT,
@@ -26,6 +25,22 @@ CREATE TABLE customers(
   phone TEXT,
   email TEXT,
   tax_no TEXT,
+  comment TEXT,
+  last_modified INTEGER NOT NULL,
+  active BOOLEAN DEFAULT TRUE NOT NULL
+);
+
+CREATE TABLE shipping_address(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  customer_id INTEGER NOT NULL REFERENCES customer(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  company TEXT,
+  honorific TEXT,
+  last_name TEXT,
+  first_name TEXT,
+  street TEXT NOT NULL,
+  zip TEXT NOT NULL,
+  city TEXT NOT NULL,
+  country TEXT,
   comment TEXT,
   last_modified INTEGER NOT NULL,
   active BOOLEAN DEFAULT TRUE NOT NULL
@@ -51,40 +66,39 @@ CREATE TABLE company_data(
   active BOOLEAN DEFAULT TRUE NOT NULL
 );
 
--- TODO: Locking von fertigen Rechnungen
 CREATE TABLE invoice(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   invoice_no INTEGER NOT NULL,
   invoice_date INTEGER NOT NULL,
-  customer_id INTEGER NOT NULL REFERENCES customers(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  customer_id INTEGER NOT NULL REFERENCES customer(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   company_id INTEGER NOT NULL REFERENCES company_data(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   payment_due INTEGER NOT NULL,
   comment TEXT,
   finalized BOOLEAN NOT NULL,
   paid BOOLEAN DEFAULT FALSE NOT NULL,
   last_modified INTEGER NOT NULL,
-  active BOOLEAN DEFAULT TRUE
+  active BOOLEAN DEFAULT TRUE NOT NULL
 );
 
-CREATE TABLE invoice_elements(
+CREATE TABLE invoice_element(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   invoice_no INTEGER NOT NULL REFERENCES invoice(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   invoice_element INTEGER NOT NULL,
-  article_id INTEGER NOT NULL REFERENCES articles(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  article_id INTEGER NOT NULL REFERENCES article(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   amount INTEGER NOT NULL,
   comment TEXT,
   last_modified INTEGER NOT NULL,
-  active BOOLEAN DEFAULT TRUE
+  active BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE invoice_payments(
   ID INTEGER PRIMARY KEY AUTOINCREMENT,
   invoice_no INTEGER NOT NULL REFERENCES invoice(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  payment_amount DECIMAL(16,2),
-  payment_date INTEGER,
+  payment_amount DECIMAL(16,2) NOT NULL,
+  payment_date INTEGER NOT NULL,
   comment TEXT,
   last_modified INTEGER NOT NULL,
-  active BOOLEAN DEFAULT TRUE
+  active BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 -- TODO: Lieferscheine?

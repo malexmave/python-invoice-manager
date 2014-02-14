@@ -62,7 +62,7 @@ class InvoiceDataInteractions(unittest.TestCase):
 	def testFinalizedInvoiceNotMutable(self):
 		self.failUnless(True)
 """
-class DBGeneration(unittest.TestCase):
+class DBSpecifications(unittest.TestCase):
 	def testDBSpec_options(self):
 		optionspat = re.compile('((NOT NULL)|(PRIMARY KEY)|(AUTOINCREMENT)|' +
 			'(DEFAULT (TRUE|FALSE)))+')
@@ -98,6 +98,8 @@ class DBGeneration(unittest.TestCase):
 				assert s[tbl][field][0] in types, \
 					"Invalid type for %s.%s" % (tbl,field)
 
+
+class DBGeneration(unittest.TestCase):
 	def testDBGeneration(self):
 		pass
 

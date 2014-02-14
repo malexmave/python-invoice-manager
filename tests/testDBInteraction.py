@@ -1,4 +1,7 @@
+import os
+import random
 import re
+import string
 import unittest
 
 import data.initialize
@@ -100,8 +103,20 @@ class DBSpecifications(unittest.TestCase):
 
 
 class DBGeneration(unittest.TestCase):
-	def testDBGeneration(self):
-		pass
+	def setUp(self):
+		self.testfilename = "test." + ''.join(random.choice(
+			string.ascii_lowercase + string.digits) for x in range(8)) + ".db"
 
-	def testGeneratedDBCorrectness(self):
-		pass
+	def testDBGeneration(self):
+		if not os.path.isfile(self.testfilename):
+			try:
+				data.initialize.setup(self.testfilename)
+			except Exception, e:
+				os.remove(self.testfilename)
+				self.fail('An exception occured: ' + str(e))
+			try:
+				data.initialize.checkConformity(self.testfilename)
+			except Exception, e:
+				os.remove(self.testfilename)
+				self.fail('An exception occured: ' + str(e))
+			os.remove(self.testfilename)

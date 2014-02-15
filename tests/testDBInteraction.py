@@ -67,15 +67,22 @@ class InvoiceDataInteractions(unittest.TestCase):
 """
 class DBSpecifications(unittest.TestCase):
 	def testDBSpec_options(self):
-		optionspat = re.compile('((NOT NULL)|(PRIMARY KEY)|(AUTOINCREMENT)|' +
-			'(DEFAULT (TRUE|FALSE)))+')
 		s = data.structure.STRUCT
 		for tbl in s:
 			for field in s[tbl]:
-				if s[tbl][field][1] != "":
-					mo = re.match(optionspat, s[tbl][field][1])
-					assert mo != None, "Incorrect SQL options for %s.%s" \
-						% (tbl, field)
+				try:
+					assert type(s[tbl][field]["notNull"]) == bool, \
+					    "%s.%s: notNull not a boolean" % (tbl, field)
+					assert type(s[tbl][field]["primaryKey"]) == bool, \
+						"%s.%s: primaryKey not a boolean" % (tbl, field)
+					assert type(s[tbl][field]["autoIncrement"])  == bool, \
+						"%s.%s: autoIncrement not a boolean" % (tbl, field)
+					if s[tbl][field]["default"] != None:
+						pass  # TODO: Use the class generators mapping of datatypes
+					if s[tbl][field]["autoIncrement"]:
+						assert s[tbl][field]["primaryKey"], "AIncrement on non-PK."
+				except KeyError, e:
+					self.fail("KeyError on %s.%s: %s" % (tbl, field, str(e)))
 
 	def testDBSpec_fkeys(self):
 		fkeypat = re.compile('REFERENCES (.*)\((.*)\) ON (UPDATE|DELETE) ' +
@@ -101,7 +108,7 @@ class DBSpecifications(unittest.TestCase):
 				assert s[tbl][field][0] in types, \
 					"Invalid type for %s.%s" % (tbl,field)
 
-
+"""
 class DBGeneration(unittest.TestCase):
 	def setUp(self):
 		self.testfilename = "test." + ''.join(random.choice(
@@ -120,3 +127,4 @@ class DBGeneration(unittest.TestCase):
 				os.remove(self.testfilename)
 				self.fail('An exception occured: ' + str(e))
 			os.remove(self.testfilename)
+"""

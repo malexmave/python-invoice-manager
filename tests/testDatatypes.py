@@ -53,7 +53,6 @@ class ArticleType(unittest.TestCase):
 	def testArticleGetters(self):
 		try:
 			article = data.datatype.Article(self.template)
-			assert data.datatype.Herp().derp()
 		except AssertionError:
 			self.fail("Generation of Article Object failed.")
 		for key in self.getters:

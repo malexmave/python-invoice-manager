@@ -77,28 +77,57 @@ class DBSpecifications(unittest.TestCase):
 						"%s.%s: primaryKey not a boolean" % (tbl, field)
 					assert type(s[tbl][field]["autoIncrement"])  == bool, \
 						"%s.%s: autoIncrement not a boolean" % (tbl, field)
+					assert type(s[tbl][field]["foreignKey"]) in \
+						[type(None), dict], "%s.%s: Invalid foreignKey." % \
+						(tbl, field)
 					if s[tbl][field]["default"] != None:
-						pass  # TODO: Use the class generators mapping of datatypes
+						pass  # TODO: Use the datatype mapping
 					if s[tbl][field]["autoIncrement"]:
-						assert s[tbl][field]["primaryKey"], "AIncrement on non-PK."
+						assert s[tbl][field]["primaryKey"], \
+						"%s.%s: AutoIncrement on non-PK" % (tbl, field)
 				except KeyError, e:
 					self.fail("KeyError on %s.%s: %s" % (tbl, field, str(e)))
 
 	def testDBSpec_fkeys(self):
-		fkeypat = re.compile('REFERENCES (.*)\((.*)\) ON (UPDATE|DELETE) ' +
-			'(RESTRICT|DELETE|CASCADE) ON (UPDATE|DELETE) ' + 
-			'(RESTRICT|DELETE|CASCADE)')
+		VALID_CONSTRAINTS = ["UPDATE", "DELETE", "CASCADE", "RESTRICT"]
 		s = data.structure.STRUCT
 		for tbl in s:
 			for field in s[tbl]:
-				if s[tbl][field][2] != "":
-					mo = re.match(fkeypat, s[tbl][field][2])
-					assert mo != None, "Incorrect fkey statement for %s.%s" \
-						% (tbl, field)
-					assert mo.group(1) in s.keys(), \
-						"Reference to undefined table in %s.%s" % (tbl, field)
-					assert mo.group(2) in s[mo.group(1)].keys(), \
-						"Reference to undefined field in %s.%s" % (tbl, field)
+				try:
+					if s[tbl][field]["foreignKey"] != None:
+						# Typing checks
+						assert type(s[tbl][field]["foreignKey"]["table"]) \
+							== str, "%s.%s: Table choice should be string" % \
+							(tbl, field)
+						assert type(s[tbl][field]["foreignKey"]["field"]) \
+							== str, "%s.%s: Field choice should be string" % \
+							(tbl, field)
+						assert type(s[tbl][field]["foreignKey"]["onDel"]) \
+							== str, "%s.%s: onDel choice should be string" % \
+							(tbl, field)
+						assert type(s[tbl][field]["foreignKey"]["onUpd"]) \
+							== str, "%s.%s: onUpd choice should be string" % \
+							(tbl, field)
+						assert s[tbl][field]["foreignKey"]["onDel"].upper() \
+							in VALID_CONSTRAINTS, "%s.%s: Invalid constraints"\
+							% (tbl, field)
+						assert s[tbl][field]["foreignKey"]["onUpd"].upper() \
+							in VALID_CONSTRAINTS, "%s.%s: Invalid constraints"\
+							% (tbl, field)
+						
+						# Semantic Checks
+						assert s[tbl][field]["foreignKey"]["table"] in s, \
+							"%s.%s: Reference to non-existent table" % \
+							(tbl, field)
+						assert s[tbl][field]["foreignKey"]["field"] \
+							in s[s[tbl][field]["foreignKey"]["table"]],\
+							"%s.%s: Reference to non-existent field" % \
+							(tbl, field)
+
+
+				except KeyError, e:
+					self.fail("KeyError on %s.%s: %s" % (tbl, field, str(e)))
+
 
 	def testDBSpec_types(self):
 		types = ["INTEGER", "TEXT", "DECIMAL(16,2)", "BOOLEAN", "BLOB"]

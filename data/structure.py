@@ -248,7 +248,7 @@ STRUCT = {
 	        "foreignKey": None
 	    },
         "customer_id":   {
-            "type": "INTEGER",
+            "type": "integer",
             "notNull": True,
             "primaryKey": False,
             "autoIncrement": False,

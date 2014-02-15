@@ -1,6 +1,5 @@
 import os
 import random
-import re
 import string
 import unittest
 
@@ -123,18 +122,17 @@ class DBSpecifications(unittest.TestCase):
 							in s[s[tbl][field]["foreignKey"]["table"]],\
 							"%s.%s: Reference to non-existent field" % \
 							(tbl, field)
-
-
 				except KeyError, e:
 					self.fail("KeyError on %s.%s: %s" % (tbl, field, str(e)))
 
 
 	def testDBSpec_types(self):
-		types = ["INTEGER", "TEXT", "DECIMAL(16,2)", "BOOLEAN", "BLOB"]
+		types = ["INTEGER", "TEXT", "DECIMAL(16,2)", "BOOLEAN", "BLOB" \
+				 "INT", "REAL", "FLOAT", "DOUBLE", "NONE"]
 		s = data.structure.STRUCT
 		for tbl in s:
 			for field in s[tbl]:
-				assert s[tbl][field][0] in types, \
+				assert s[tbl][field]["type"].upper() in types, \
 					"Invalid type for %s.%s" % (tbl,field)
 
 """

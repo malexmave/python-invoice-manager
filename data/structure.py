@@ -719,3 +719,10 @@ STRUCT = {
         }
 	}
 }
+
+SQL_TO_PY_TYPE = {
+    "INTEGER"      : "int",
+    "TEXT"         : "str",
+    "BOOLEAN"      : "bool",
+    "DECIMAL(16,2)": "float"
+}

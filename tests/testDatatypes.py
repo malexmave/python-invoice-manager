@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import copy
 import unittest
-
 import data.datatype
 
+"""
 class ArticleType(unittest.TestCase):
 	def setUp(self):
 		self.template = {"ID": 1, 
@@ -148,3 +148,4 @@ class CompanyType(unittest.TestCase):
 			oldvar = copy.deepcopy(self.template[key])
 			self.template[key] = None
 			self.assertEqual(oldvar, self.getters[key](company), "%s: unbroken reference.")
+"""

@@ -69,7 +69,7 @@ class DBSpecifications(unittest.TestCase):
 	def testDBSpec_options(self):
 		optionspat = re.compile('((NOT NULL)|(PRIMARY KEY)|(AUTOINCREMENT)|' +
 			'(DEFAULT (TRUE|FALSE)))+')
-		s = data.initialize.SQL_STRUCT
+		s = data.structure.STRUCT
 		for tbl in s:
 			for field in s[tbl]:
 				if s[tbl][field][1] != "":
@@ -81,7 +81,7 @@ class DBSpecifications(unittest.TestCase):
 		fkeypat = re.compile('REFERENCES (.*)\((.*)\) ON (UPDATE|DELETE) ' +
 			'(RESTRICT|DELETE|CASCADE) ON (UPDATE|DELETE) ' + 
 			'(RESTRICT|DELETE|CASCADE)')
-		s = data.initialize.SQL_STRUCT
+		s = data.structure.STRUCT
 		for tbl in s:
 			for field in s[tbl]:
 				if s[tbl][field][2] != "":
@@ -94,8 +94,8 @@ class DBSpecifications(unittest.TestCase):
 						"Reference to undefined field in %s.%s" % (tbl, field)
 
 	def testDBSpec_types(self):
-		types = ["INTEGER", "TEXT", "DECIMAL(16,2)", "BOOLEAN"]
-		s = data.initialize.SQL_STRUCT
+		types = ["INTEGER", "TEXT", "DECIMAL(16,2)", "BOOLEAN", "BLOB"]
+		s = data.structure.STRUCT
 		for tbl in s:
 			for field in s[tbl]:
 				assert s[tbl][field][0] in types, \

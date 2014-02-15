@@ -8,7 +8,7 @@ CREATE TABLE article(
   gross DECIMAL(16,2) NOT NULL,
   comment TEXT,
   last_modified INTEGER NOT NULL,
-  active BOOLEAN DEFAULT TRUE
+  active BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE customer(

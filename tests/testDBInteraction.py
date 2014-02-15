@@ -66,77 +66,18 @@ class InvoiceDataInteractions(unittest.TestCase):
 """
 class DBSpecifications(unittest.TestCase):
 	def testDBSpec_options(self):
-		s = data.structure.STRUCT
-		for tbl in s:
-			for field in s[tbl]:
-				try:
-					assert type(s[tbl][field]["notNull"]) == bool, \
-					    "%s.%s: notNull not a boolean" % (tbl, field)
-					assert type(s[tbl][field]["primaryKey"]) == bool, \
-						"%s.%s: primaryKey not a boolean" % (tbl, field)
-					assert type(s[tbl][field]["autoIncrement"])  == bool, \
-						"%s.%s: autoIncrement not a boolean" % (tbl, field)
-					assert type(s[tbl][field]["foreignKey"]) in \
-						[type(None), dict], "%s.%s: Invalid foreignKey." % \
-						(tbl, field)
-					if s[tbl][field]["default"] != None:
-						pass  # TODO: Use the datatype mapping
-					if s[tbl][field]["autoIncrement"]:
-						assert s[tbl][field]["primaryKey"], \
-						"%s.%s: AutoIncrement on non-PK" % (tbl, field)
-				except KeyError, e:
-					self.fail("KeyError on %s.%s: %s" % (tbl, field, str(e)))
+		data.initialize.testDBSpec_options()
 
 	def testDBSpec_fkeys(self):
-		VALID_CONSTRAINTS = ["UPDATE", "DELETE", "CASCADE", "RESTRICT"]
-		s = data.structure.STRUCT
-		for tbl in s:
-			for field in s[tbl]:
-				try:
-					if s[tbl][field]["foreignKey"] != None:
-						# Typing checks
-						assert type(s[tbl][field]["foreignKey"]["table"]) \
-							== str, "%s.%s: Table choice should be string" % \
-							(tbl, field)
-						assert type(s[tbl][field]["foreignKey"]["field"]) \
-							== str, "%s.%s: Field choice should be string" % \
-							(tbl, field)
-						assert type(s[tbl][field]["foreignKey"]["onDel"]) \
-							== str, "%s.%s: onDel choice should be string" % \
-							(tbl, field)
-						assert type(s[tbl][field]["foreignKey"]["onUpd"]) \
-							== str, "%s.%s: onUpd choice should be string" % \
-							(tbl, field)
-						assert s[tbl][field]["foreignKey"]["onDel"].upper() \
-							in VALID_CONSTRAINTS, "%s.%s: Invalid constraints"\
-							% (tbl, field)
-						assert s[tbl][field]["foreignKey"]["onUpd"].upper() \
-							in VALID_CONSTRAINTS, "%s.%s: Invalid constraints"\
-							% (tbl, field)
-						
-						# Semantic Checks
-						assert s[tbl][field]["foreignKey"]["table"] in s, \
-							"%s.%s: Reference to non-existent table" % \
-							(tbl, field)
-						assert s[tbl][field]["foreignKey"]["field"] \
-							in s[s[tbl][field]["foreignKey"]["table"]],\
-							"%s.%s: Reference to non-existent field" % \
-							(tbl, field)
-				except KeyError, e:
-					self.fail("KeyError on %s.%s: %s" % (tbl, field, str(e)))
+		data.initialize.testDBSpec_fkeys()
 
 
 	def testDBSpec_types(self):
-		types = ["INTEGER", "TEXT", "DECIMAL(16,2)", "BOOLEAN", "BLOB" \
-				 "INT", "REAL", "FLOAT", "DOUBLE", "NONE"]
-		s = data.structure.STRUCT
-		for tbl in s:
-			for field in s[tbl]:
-				assert s[tbl][field]["type"].upper() in types, \
-					"Invalid type for %s.%s" % (tbl,field)
+		data.initialize.testDBSpec_types()
 
-"""
+
 class DBGeneration(unittest.TestCase):
+	# TODO: Negative-tests
 	def setUp(self):
 		self.testfilename = "test." + ''.join(random.choice(
 			string.ascii_lowercase + string.digits) for x in range(8)) + ".db"
@@ -146,12 +87,20 @@ class DBGeneration(unittest.TestCase):
 			try:
 				data.initialize.setup(self.testfilename)
 			except Exception, e:
-				os.remove(self.testfilename)
+				try:
+					os.remove(self.testfilename)
+				except OSError:
+					self.fail('An exception occured: ' + str(e))
 				self.fail('An exception occured: ' + str(e))
 			try:
 				data.initialize.checkConformity(self.testfilename)
 			except Exception, e:
-				os.remove(self.testfilename)
+				try:
+					os.remove(self.testfilename)
+				except OSError:
+					self.fail('An exception occured: ' + str(e))
 				self.fail('An exception occured: ' + str(e))
-			os.remove(self.testfilename)
-"""
+			try:
+				os.remove(self.testfilename)
+			except OSError:
+				pass

@@ -4,8 +4,8 @@ from random import randint, choice
 import string
 
 def randomString():
-	return ''.join(choice(string.ascii_lowercase + string.digits) \
-		for x in range(randint(3,100)))
+    return ''.join(choice(string.ascii_lowercase + string.digits) \
+        for x in range(randint(3,100)))
 
 # cd = "classdef", the definition of the classes we are building
 cd =  "import copy\n"
@@ -14,36 +14,36 @@ cd += "import data.datatype\n\n"
 
 exec cd
 for tbl in structure.STRUCT:
-	camelTbl = structure.CamelCase(tbl)
-	cd += "class %s(unittest.TestCase):\n" % camelTbl
-	cd += " "*4 + "def setUp(self):\n"
-	cd += " "*8 + "self.template = {\n"
-	dictdef = " "*8 + "self.getters = {\n"
-	allowedNone = []
-	for field in structure.STRUCT[tbl]:
-		fd = structure.STRUCT[tbl][field]
-		if structure.SQL_TO_PY_TYPE[fd["type"]] == "int":
-			cd += " "*12 + "'%s': %i,\n" % (field, randint(1, 10000))
-		elif structure.SQL_TO_PY_TYPE[fd["type"]] == "str":
-			cd += " "*12 + "'%s': '%s',\n" % (field, randomString())
-		elif structure.SQL_TO_PY_TYPE[fd["type"]] == "bool":
-			cd += " "*12 + "'%s': %s,\n" % (field, \
-				choice(['True', 'False']))
-		elif structure.SQL_TO_PY_TYPE[fd["type"]] == "float":
-			cd += " "*12 + "'%s': %f,\n" % (field, 
-				float(randint(1,1000) + randint(1,99)*0.01))
-		else:
-			assert False, "Unknown type detected."
-		dictdef += " "*12 + "'%s': data.datatype.%s.%s,\n" % \
-			(field, camelTbl, "get" + structure.CamelCase(field))
-		if not fd["notNull"]:
-			allowedNone.append(field)
-	cd += " "*8 + "}\n"
-	cd += dictdef + " "*8 + "}\n"
+    camelTbl = structure.CamelCase(tbl)
+    cd += "class %s(unittest.TestCase):\n" % camelTbl
+    cd += " "*4 + "def setUp(self):\n"
+    cd += " "*8 + "self.template = {\n"
+    dictdef = " "*8 + "self.getters = {\n"
+    allowedNone = []
+    for field in structure.STRUCT[tbl]:
+        fd = structure.STRUCT[tbl][field]
+        if structure.SQL_TO_PY_TYPE[fd["type"]] == "int":
+            cd += " "*12 + "'%s': %i,\n" % (field, randint(1, 10000))
+        elif structure.SQL_TO_PY_TYPE[fd["type"]] == "str":
+            cd += " "*12 + "'%s': '%s',\n" % (field, randomString())
+        elif structure.SQL_TO_PY_TYPE[fd["type"]] == "bool":
+            cd += " "*12 + "'%s': %s,\n" % (field, \
+                choice(['True', 'False']))
+        elif structure.SQL_TO_PY_TYPE[fd["type"]] == "float":
+            cd += " "*12 + "'%s': %f,\n" % (field, 
+                float(randint(1,1000) + randint(1,99)*0.01))
+        else:
+            assert False, "Unknown type detected."
+        dictdef += " "*12 + "'%s': data.datatype.%s.%s,\n" % \
+            (field, camelTbl, "get" + structure.CamelCase(field))
+        if not fd["notNull"]:
+            allowedNone.append(field)
+    cd += " "*8 + "}\n"
+    cd += dictdef + " "*8 + "}\n"
 
-	### Generate test functions
-	# Generate Generation tests
-	cd += """
+    ### Generate test functions
+    # Generate Generation tests
+    cd += """
     def test{0}Generation(self):
         allowedNone = {1}
         for field in self.template:
@@ -66,8 +66,8 @@ for tbl in structure.STRUCT:
 
 """.format(camelTbl, str(allowedNone))
 
-	# Generate getter tests
-	cd += """
+    # Generate getter tests
+    cd += """
     def test{0}Getters(self):
         try:
             {0} = data.datatype.{0}(self.template)
@@ -80,8 +80,8 @@ for tbl in structure.STRUCT:
 
 """.format(camelTbl)
 
-	# Generate reference break tests
-	cd += """
+    # Generate reference break tests
+    cd += """
     def test{0}ReferenceBreak(self):
         try:
             {0} = data.datatype.{0}(self.template)
@@ -94,4 +94,5 @@ for tbl in structure.STRUCT:
 
 """.format(camelTbl)
 
+# Evaluate resulting string to generate tests for datatypes
 exec cd

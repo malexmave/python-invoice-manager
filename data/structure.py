@@ -1,12 +1,14 @@
+import re
+
 # SQL-Statements to generate the Database are represented like this.
-# SQL_STRUCT = {
+# STRUCT = {
 #     TABLENAME: {
 #         FIELDNAME: {
 #             "type": [INTEGER|TEXT|DECIMAL(16,2)|BOOLEAN|BLOB],
 #             "notNull": [True|False],
 #             "primaryKey": [True|False],
 #             "autoIncrement": [True|False],
-#             "default": VALUE,
+#             "default": [VALUE|None],
 #             "foreignKey": [ForeignKeyStatement|None]
 #         },
 #         FIELDNAME: ...
@@ -726,3 +728,9 @@ SQL_TO_PY_TYPE = {
     "BOOLEAN"      : "bool",
     "DECIMAL(16,2)": "float"
 }
+
+def CamelCase(strng):
+    def _cc(mobj):
+        rv = mobj.group(0)[1:]
+        return rv.upper()
+    return re.sub('_.', _cc, strng.capitalize())

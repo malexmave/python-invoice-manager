@@ -1,15 +1,10 @@
 from data import structure
-import re
-
-def _CamelCase(mobj):
-	rv = mobj.group(0)[1:]
-	return rv.upper()
 
 
 classdef = "from copy import deepcopy\n\n"
 for tbl in structure.STRUCT:
 	# Class header
-	camelTbl = re.sub('_.', _CamelCase, tbl.capitalize())
+	camelTbl = structure.CamelCase(tbl)
 	classdef +=  "class %s():\n" % camelTbl
 	classdef += " "*4 + "def __init__(self,dat):\n"
 
@@ -32,7 +27,7 @@ for tbl in structure.STRUCT:
 
 	# Create getters
 	for field in structure.STRUCT[tbl]:
-		camelField = re.sub('_.', _CamelCase, field.capitalize())
+		camelField = structure.CamelCase(field)
 		classdef += " "*4 + "def get%s(self):\n" % camelField
 		classdef += " "*8 + "return self._%s\n\n" % field
 	classdef += "\n"

@@ -76,6 +76,7 @@ class DBSpecifications(unittest.TestCase):
 		data.initialize.testDBSpec_types()
 
 
+
 class DBGeneration(unittest.TestCase):
 	# TODO: Negative-tests
 	def setUp(self):

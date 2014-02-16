@@ -1,7 +1,7 @@
 import nose
 # import data.initialize
 # import os
-
+# import tests.testDatatypes
 
 dbfile = "data.db"
 
@@ -22,3 +22,4 @@ if __name__ == '__main__':
 		#	print "Error while checking Database validity:", str(e)
 		#	raise e
 	main()
+	pass

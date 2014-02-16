@@ -1,151 +1,97 @@
 # -*- coding: utf-8 -*-
-import copy
-import unittest
-import data.datatype
+from data import structure
+from random import randint, choice
+import string
 
-"""
-class ArticleType(unittest.TestCase):
-	def setUp(self):
-		self.template = {"ID": 1, 
-			"article_no": 1, 
-			"name": "Hurpdurp", 
-			"description": "Herp and Derp", 
-			"article_type": "Service", 
-			"tax_rate": 19, 
-			"gross": 20, 
-			"comment": "This is a comment", 
-			"last_modified": 3,
-			"active": True
-		}
-		self.getters = {
-			"ID": data.datatype.Article.getPersistentID,
-			"article_no": data.datatype.Article.getArticleNumber,
-			"name": data.datatype.Article.getName,
-			"description": data.datatype.Article.getDescription,
-			"article_type": data.datatype.Article.getArticleType,
-			"tax_rate": data.datatype.Article.getTaxRate,
-			"gross": data.datatype.Article.getGrossPrice,
-			"comment": data.datatype.Article.getComment,
-			"active": data.datatype.Article.isActive
-		}
+def randomString():
+	return ''.join(choice(string.ascii_lowercase + string.digits) \
+		for x in range(randint(3,100)))
 
-	def testArticleGeneration(self):
-		allowedNone = ["article_type", "comment"]
-		for field in self.template:
-			rv = 0
-			try:
-				oldvar = copy.copy(self.template[field])
-				self.template[field] = None
-				data.datatype.Article(self.template)
-				if field not in allowedNone:
-					rv = 1
-			except AssertionError:
-				if field in allowedNone:
-					rv = 2
-			finally:
-				self.template[field] = oldvar
-				if rv == 1:
-					self.fail("%s = None accepted.")
-				if rv == 2:
-					self.fail("%s = None not accepted.")
+# cd = "classdef", the definition of the classes we are building
+cd =  "import copy\n"
+cd += "import unittest\n"
+cd += "import data.datatype\n\n"
 
+exec cd
+for tbl in structure.STRUCT:
+	camelTbl = structure.CamelCase(tbl)
+	cd += "class %s(unittest.TestCase):\n" % camelTbl
+	cd += " "*4 + "def setUp(self):\n"
+	cd += " "*8 + "self.template = {\n"
+	dictdef = " "*8 + "self.getters = {\n"
+	allowedNone = []
+	for field in structure.STRUCT[tbl]:
+		fd = structure.STRUCT[tbl][field]
+		if structure.SQL_TO_PY_TYPE[fd["type"]] == "int":
+			cd += " "*12 + "'%s': %i,\n" % (field, randint(1, 10000))
+		elif structure.SQL_TO_PY_TYPE[fd["type"]] == "str":
+			cd += " "*12 + "'%s': '%s',\n" % (field, randomString())
+		elif structure.SQL_TO_PY_TYPE[fd["type"]] == "bool":
+			cd += " "*12 + "'%s': %s,\n" % (field, \
+				choice(['True', 'False']))
+		elif structure.SQL_TO_PY_TYPE[fd["type"]] == "float":
+			cd += " "*12 + "'%s': %f,\n" % (field, 
+				float(randint(1,1000) + randint(1,99)*0.01))
+		else:
+			assert False, "Unknown type detected."
+		dictdef += " "*12 + "'%s': data.datatype.%s.%s,\n" % \
+			(field, camelTbl, "get" + structure.CamelCase(field))
+		if not fd["notNull"]:
+			allowedNone.append(field)
+	cd += " "*8 + "}\n"
+	cd += dictdef + " "*8 + "}\n"
 
-	def testArticleGetters(self):
-		try:
-			article = data.datatype.Article(self.template)
-		except AssertionError:
-			self.fail("Generation of Article Object failed.")
-		for key in self.getters:
-			self.assertEqual(self.template[key], self.getters[key](article), \
-				"%s getter failed: Expected %s, but got %s" % \
-				(key, str(self.template[key]), str(self.getters[key](article))))
+	### Generate test functions
+	# Generate Generation tests
+	cd += """
+    def test{0}Generation(self):
+        allowedNone = {1}
+        for field in self.template:
+            rv = 0
+            try:
+                oldvar = copy.deepcopy(self.template[field])
+                self.template[field] = None
+                data.datatype.{0}(self.template)
+                if field not in allowedNone:
+                    rv = 1
+            except AssertionError:
+                if field in allowedNone:
+                    rv = 2
+            finally:
+                self.template[field] = oldvar
+                if rv == 1:
+                    self.fail("%s = None accepted." % field)
+                if rv == 2:
+                    self.fail("%s = None not accepted." % field)
 
-	def testReferenceBreak(self):
-		try:
-			article = data.datatype.Article(self.template)
-		except AssertionError:
-			self.fail("Generation of Article Object failed.")
-		for key in self.getters:
-			oldvar = copy.deepcopy(self.template[key])
-			self.template[key] = None
-			self.assertEqual(oldvar, self.getters[key](article), "%s: unbroken reference.")
+""".format(camelTbl, str(allowedNone))
 
+	# Generate getter tests
+	cd += """
+    def test{0}Getters(self):
+        try:
+            {0} = data.datatype.{0}(self.template)
+        except AssertionError:
+            self.fail("Generation of {0} Object failed.")
+        for key in self.getters:
+            self.assertEqual(self.template[key], self.getters[key]({0}), \\
+                "%s getter failed: Expected %s, but got %s" % \\
+                (key, str(self.template[key]), str(self.getters[key]({0}))))
 
-class CompanyType(unittest.TestCase):
-	def setUp(self):
-		self.template = {"ID": 2, 
-			"company_name": "Herpderp",
-			"street": "Wonderstreet 1337",
-			"zip": "31337",
-			"city": "L33thaven",
-			"phone": "+1 292992 666 42",
-			"mobile": "+1 424242424242",
-			"website": "31337company.com",
-			"email": "42@31337company.com",
-			"bank_iban": "LOL3313374242666",
-			"bank_bic": "TROLLFACEXX",
-			"bank_name": "Gotham City Bank",
-			"tax_no": "31 337 424242",
-			"currency": "€",
-			"last_modified": 31337,
-			"active": True
-		}
-		self.getters = {
-			"ID": data.datatype.Company.getPersistentID,
-			"company_name": data.datatype.Company.getName,
-			"street": data.datatype.Company.getStreet,
-			"zip": data.datatype.Company.getZIP,
-			"city": data.datatype.Company.getCity,
-			"phone": data.datatype.Company.getPhone,
-			"mobile": data.datatype.Company.getMobile,
-			"website": data.datatype.Company.getWebsite,
-			"email": data.datatype.Company.getEmail,
-			"bank_iban": data.datatype.Company.getIBAN,
-			"bank_bic": data.datatype.Company.getBIC,
-			"bank_name": data.datatype.Company.getBankName,
-			"tax_no": data.datatype.Company.getTaxNo,
-			"currency": data.datatype.Company.getCurrency,
-			"active": data.datatype.Company.isActive
-		}
+""".format(camelTbl)
 
-	def testCompanyGeneration(self):
-		allowedNone = ["mobile", "website", "email"]
-		for field in self.template:
-			rv = 0
-			try:
-				oldvar = copy.copy(self.template[field])
-				self.template[field] = None
-				data.datatype.Company(self.template)
-				if field not in allowedNone:
-					rv = 1
-			except AssertionError:
-				if field in allowedNone:
-					rv = 2
-			finally:
-				self.template[field] = oldvar
-				if rv == 1:
-					self.fail("%s = None accepted.")
-				if rv == 2:
-					self.fail("%s = None not accepted.")
+	# Generate reference break tests
+	cd += """
+    def test{0}ReferenceBreak(self):
+        try:
+            {0} = data.datatype.{0}(self.template)
+        except AssertionError:
+            self.fail("Generation of {0} Object failed.")
+        for key in self.getters:
+            oldvar = copy.deepcopy(self.template[key])
+            self.template[key] = None
+            self.assertEqual(oldvar, self.getters[key]({0}), "%s: unbroken reference.")
 
+""".format(camelTbl)
 
-	def testCompanyGetters(self):
-		try:
-			company = data.datatype.Company(self.template)
-		except AssertionError:
-			self.fail("Generation of company object failed")
-		for key in self.getters:
-			self.assertEqual(self.template[key], self.getters[key](company), \
-				"%s getter failed: Expected %s, but got %s" % \
-				(key, str(self.template[key]), str(self.getters[key](company))))
-
-	def testReferenceBreak(self):
-		try:
-			company = data.datatype.Company(self.template)
-		except AssertionError:
-			self.fail("Generation of company object failed")
-		for key in self.getters:
-			oldvar = copy.deepcopy(self.template[key])
-			self.template[key] = None
-			self.assertEqual(oldvar, self.getters[key](company), "%s: unbroken reference.")
-"""
+exec cd

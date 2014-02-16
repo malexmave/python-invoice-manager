@@ -2,6 +2,7 @@ import nose
 # import data.initialize
 # import os
 # import tests.testDatatypes
+# import data.datatype
 
 dbfile = "data.db"
 

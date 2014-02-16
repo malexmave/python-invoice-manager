@@ -23,6 +23,14 @@ for tbl in structure.STRUCT:
     # Copy data
     cd += " "*8 + "for key in dat:\n"
     cd += " "*12 + "self.__dict__['_' + key] = deepcopy(dat[key])\n\n"
+    
+    # Create equality defitions
+    cd += " "*4  + "def __eq__(self, other):\n"
+    cd += " "*8  + "return (isinstance(other, self.__class__) and \\\n"
+    cd += " "*12 + "self.__dict__ == other.__dict__)\n\n"
+
+    cd += " "*4  + "def __neq__(self, other):\n"
+    cd += " "*8  + "return not self.__eq__(other)\n\n"
 
     # Create getters
     for field in structure.STRUCT[tbl]:

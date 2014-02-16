@@ -93,6 +93,19 @@ for tbl in structure.STRUCT:
             self.assertEqual(oldvar, self.getters[key]({0}), "%s: unbroken reference.")
 
 """.format(camelTbl)
+    
+    # Test equality and inequality
+    cd += """
+    def test{0}Equality(self):
+        {0}_1 = data.datatype.{0}(self.template)
+        {0}_2 = data.datatype.{0}(self.template)
+        self.template["ID"] += 1
+        {0}_3 = data.datatype.{0}(self.template)
+        assert {0}_1 == {0}_2, "{0} equality failed"
+        assert {0}_1 != {0}_3, "{0} equality failed"
+        assert {0}_2 != {0}_3, "{0} equality failed"
+
+""".format(camelTbl)
 
 # Evaluate resulting string to generate tests for datatypes
 exec cd

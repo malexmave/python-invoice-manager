@@ -28,97 +28,97 @@ import re
 #     "onUpd": [UPDATE|DELETE|CASCADE|RESTRICT]
 # }
 STRUCT = {
-	"article": {
-		"ID": {
-		    "type": "INTEGER",
-		    "notNull": False,
-		    "primaryKey": True,
-		    "autoIncrement": True,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"article_no": {
-		    "type": "INTEGER",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"name": {
-		    "type": "TEXT",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"description": {
-		    "type": "TEXT",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"article_type": {
-		    "type": "TEXT",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"tax_rate": {
-		    "type": "INTEGER",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"gross": {
-		    "type": "DECIMAL(16,2)",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		 },
-		"comment": {
-		    "type": "TEXT",
-		    "notNull": False,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"last_modified": {
-		    "type": "INTEGER",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": None,
-		    "foreignKey": None
-		},
-		"active": {
-		    "type": "BOOLEAN",
-		    "notNull": True,
-		    "primaryKey": False,
-		    "autoIncrement": False,
-		    "default": True,
-		    "foreignKey": None
-		}
-	},
-	"customer": {
-		"ID":            {
-		    "type": "INTEGER",
-		    "notNull": False,
-		    "primaryKey": True,
-		    "autoIncrement": True,
-		    "default": None,
-		    "foreignKey": None
-		},
+    "article": {
+        "ID": {
+            "type": "INTEGER",
+            "notNull": False,
+            "primaryKey": True,
+            "autoIncrement": True,
+            "default": None,
+            "foreignKey": None
+        },
+        "article_no": {
+            "type": "INTEGER",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
+        "name": {
+            "type": "TEXT",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
+        "description": {
+            "type": "TEXT",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
+        "article_type": {
+            "type": "TEXT",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
+        "tax_rate": {
+            "type": "INTEGER",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
+        "gross": {
+            "type": "DECIMAL(16,2)",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+         },
+        "comment": {
+            "type": "TEXT",
+            "notNull": False,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
+        "last_modified": {
+            "type": "INTEGER",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
+        "active": {
+            "type": "BOOLEAN",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": True,
+            "foreignKey": None
+        }
+    },
+    "customer": {
+        "ID":            {
+            "type": "INTEGER",
+            "notNull": False,
+            "primaryKey": True,
+            "autoIncrement": True,
+            "default": None,
+            "foreignKey": None
+        },
         "customer_no":   {
             "type": "INTEGER",
             "notNull": True,
@@ -239,16 +239,16 @@ STRUCT = {
             "default": True,
             "foreignKey": None
         }
-	},
-	"shipping_address": {
-	    "ID":            {
-	        "type": "INTEGER",
-	        "notNull": False,
-	        "primaryKey": True,
-	        "autoIncrement": True,
-	        "default": None,
-	        "foreignKey": None
-	    },
+    },
+    "shipping_address": {
+        "ID":            {
+            "type": "INTEGER",
+            "notNull": False,
+            "primaryKey": True,
+            "autoIncrement": True,
+            "default": None,
+            "foreignKey": None
+        },
         "customer_id":   {
             "type": "INTEGER",
             "notNull": True,
@@ -256,10 +256,10 @@ STRUCT = {
             "autoIncrement": False,
             "default": None,
             "foreignKey": {
-            	"table": "customer",
-            	"field": "ID",
-            	"onDel": "RESTRICT",
-            	"onUpd": "RESTRICT"
+                "table": "customer",
+                "field": "ID",
+                "onDel": "RESTRICT",
+                "onUpd": "RESTRICT"
             }
         },
         "company":       {
@@ -350,16 +350,16 @@ STRUCT = {
             "default": True,
             "foreignKey": None
         }
-	},
-	"company_data": {
-	    "ID":            {
-	        "type": "INTEGER",
-	        "notNull": False,
-	        "primaryKey": True,
-	        "autoIncrement": True,
-	        "default": None,
-	        "foreignKey": None
-	    },
+    },
+    "company_data": {
+        "ID":            {
+            "type": "INTEGER",
+            "notNull": False,
+            "primaryKey": True,
+            "autoIncrement": True,
+            "default": None,
+            "foreignKey": None
+        },
         "company_name":  {
             "type": "TEXT",
             "notNull": True,
@@ -480,8 +480,8 @@ STRUCT = {
             "default": True,
             "foreignKey": None
         }
-	},
-	"invoice": {
+    },
+    "invoice": {
         "ID":            {
             "type": "INTEGER",
             "notNull": False,
@@ -580,8 +580,8 @@ STRUCT = {
             "default": None,
             "foreignKey": None
         },
-	},
-	"invoice_element": {
+    },
+    "invoice_element": {
         "ID":              {
             "type": "INTEGER",
             "notNull": False,
@@ -656,8 +656,8 @@ STRUCT = {
             "default": True,
             "foreignKey": None
         },
-	},
-	"invoice_payments": {
+    },
+    "invoice_payments": {
         "ID":             {
             "type": "INTEGER",
             "notNull": False,
@@ -719,7 +719,7 @@ STRUCT = {
             "default": True,
             "foreignKey": None
         }
-	}
+    }
 }
 
 SQL_TO_PY_TYPE = {

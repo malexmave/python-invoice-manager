@@ -21,8 +21,8 @@ for tbl in structure.STRUCT:
                 .format(field, str(S2P[fd["type"].upper()]))
     
     # Copy data
-    cd += " "*8 + "for key in dat:\n"
-    cd += " "*12 + "self.__dict__['_' + key] = deepcopy(dat[key])\n\n"
+    cd += " "*8  + "for key in dat:\n"
+    cd += " "*12 + "setattr(self, '_' + key, deepcopy(dat[key]))\n\n"
     
     # Create equality defitions
     cd += " "*4  + "def __eq__(self, other):\n"

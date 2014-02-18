@@ -25,7 +25,6 @@ def checkConformity(dbfile):
     Raises:
     InvalidDatabaseStructureException -- If the database structure is incorrect
     """
-    # TODO: Modify to conform to new DB structure definition
     # Check database tables
     cursor, conn = connect.getConnection(dbfile)
     for tbl in structure.STRUCT:

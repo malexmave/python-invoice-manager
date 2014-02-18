@@ -183,22 +183,22 @@ def setup(dbfile):
     for tbl in structure.STRUCT:
         stmt = "CREATE TABLE %s(" % tbl
         for field in structure.STRUCT[tbl]:
-            cf = structure.STRUCT[tbl][field]
-            stmt += "\n%s %s " % (field, cf["type"])
-            if cf["primaryKey"]:
+            fd = structure.STRUCT[tbl][field]
+            stmt += "\n%s %s " % (field, fd["type"])
+            if fd["primaryKey"]:
                 stmt += "PRIMARY KEY "
-            if cf["autoIncrement"]:
+            if fd["autoIncrement"]:
                 stmt += "AUTOINCREMENT "
-            if cf["notNull"]:
+            if fd["notNull"]:
                 stmt += "NOT NULL "
-            if cf["default"] != None:
-                if type(cf["default"]) == str:
-                    iv = "'" + cf["default"] + "'"
+            if fd["default"] != None:
+                if type(fd["default"]) == str:
+                    iv = "'" + fd["default"] + "'"
                 else:
-                    iv = str(cf["default"])
+                    iv = str(fd["default"])
                 stmt += "DEFAULT %s " % iv
-            if cf["foreignKey"] != None:
-                fk = cf["foreignKey"]
+            if fd["foreignKey"] != None:
+                fk = fd["foreignKey"]
                 stmt += "REFERENCES %s(%s) ON DELETE %s ON UPDATE %s " % \
                     (fk["table"], fk["field"], fk["onDel"], fk["onUpd"])
             stmt = stmt[:-1] + ","

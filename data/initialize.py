@@ -92,20 +92,20 @@ def testDBSpec_options():
     for tbl in s:
         for field in s[tbl]:
             try:
-                assert type(s[tbl][field]["notNull"]) == bool, \
+                fd = s[tbl][field]
+                assert type(fd["notNull"]) == bool, \
                     "%s.%s: notNull not a boolean" % (tbl, field)
-                assert type(s[tbl][field]["primaryKey"]) == bool, \
+                assert type(fd["primaryKey"]) == bool, \
                     "%s.%s: primaryKey not a boolean" % (tbl, field)
-                assert type(s[tbl][field]["autoIncrement"])  == bool, \
+                assert type(fd["autoIncrement"])  == bool, \
                     "%s.%s: autoIncrement not a boolean" % (tbl, field)
-                assert type(s[tbl][field]["foreignKey"]) in \
+                assert type(fd["foreignKey"]) in \
                     [type(None), dict], "%s.%s: Invalid foreignKey." % \
                     (tbl, field)
-                if s[tbl][field]["default"] != None:
-                    pass  # TODO: Use the datatype mapping
-                # TODO: Verify datatypes of fkey and target
-                if s[tbl][field]["autoIncrement"]:
-                    assert s[tbl][field]["primaryKey"], \
+                if fd["default"] != None:
+                    pass  # TODO: Check type of default
+                if fd["autoIncrement"]:
+                    assert fd["primaryKey"], \
                     "%s.%s: AutoIncrement on non-PK" % (tbl, field)
             except KeyError, e:
                 raise AssertionError("KeyError on %s.%s: %s" % (tbl, field, str(e)))
@@ -115,35 +115,39 @@ def testDBSpec_fkeys():
     s = structure.STRUCT
     for tbl in s:
         for field in s[tbl]:
+            fd = s[tbl][field]
             try:
-                if s[tbl][field]["foreignKey"] != None:
+                if fd["foreignKey"] != None:
+                    fk = fd["foreignKey"]
                     # Typing checks
-                    assert type(s[tbl][field]["foreignKey"]["table"]) \
-                        == str, "%s.%s: Table choice should be string" % \
+                    assert type(fk["table"]) == str, \
+                        "%s.%s: Table choice should be string" % \
                         (tbl, field)
-                    assert type(s[tbl][field]["foreignKey"]["field"]) \
-                        == str, "%s.%s: Field choice should be string" % \
+                    assert type(fk["field"]) == str, \
+                        "%s.%s: Field choice should be string" % \
                         (tbl, field)
-                    assert type(s[tbl][field]["foreignKey"]["onDel"]) \
-                        == str, "%s.%s: onDel choice should be string" % \
+                    assert type(fk["onDel"]) == str, \
+                        "%s.%s: onDel choice should be string" % \
                         (tbl, field)
-                    assert type(s[tbl][field]["foreignKey"]["onUpd"]) \
-                        == str, "%s.%s: onUpd choice should be string" % \
+                    assert type(fk["onUpd"]) == str, \
+                        "%s.%s: onUpd choice should be string" % \
                         (tbl, field)
-                    assert s[tbl][field]["foreignKey"]["onDel"].upper() \
-                        in VALID_CONSTRAINTS, "%s.%s: Invalid constraints"\
-                        % (tbl, field)
-                    assert s[tbl][field]["foreignKey"]["onUpd"].upper() \
-                        in VALID_CONSTRAINTS, "%s.%s: Invalid constraints"\
-                        % (tbl, field)
+                    assert fk["onDel"].upper() in VALID_CONSTRAINTS, \
+                        "%s.%s: Invalid constraints" % (tbl, field)
+                    assert fk["onUpd"].upper() in VALID_CONSTRAINTS, \
+                        "%s.%s: Invalid constraints" % (tbl, field)
                     
                     # Semantic Checks
-                    assert s[tbl][field]["foreignKey"]["table"] in s, \
+                    assert fk["table"] in s, \
                         "%s.%s: Reference to non-existent table" % \
                         (tbl, field)
-                    assert s[tbl][field]["foreignKey"]["field"] \
-                        in s[s[tbl][field]["foreignKey"]["table"]],\
+                    assert fk["field"] in s[fk["table"]], \
                         "%s.%s: Reference to non-existent field" % \
+                        (tbl, field)
+
+                    # Referenced Datatype check
+                    assert fd["type"] == s[fk["table"]][fk["field"]]["type"], \
+                        "%s.%s: Type mismatch with target field." % \
                         (tbl, field)
             except KeyError, e:
                 raise AssertionError("KeyError on %s.%s: %s" % (tbl, field, str(e)))

@@ -32,6 +32,18 @@ for tbl in structure.STRUCT:
     cd += " "*4  + "def __neq__(self, other):\n"
     cd += " "*8  + "return not self.__eq__(other)\n\n"
 
+    # Create checkRep function
+    cd += " "*4  + "def checkRep(self):\n"
+    for field in structure.STRUCT[tbl]:
+        fd = structure.STRUCT[tbl][field]
+        if fd["notNull"]:
+            cd += " "*8 +"assert type(self._{0}) == {1}, '{0} is no {1}'\n" \
+                .format(field, str(S2P[fd["type"].upper()]))
+        else:
+            cd += " "*8 +"assert type(self._{0}) in ".format(field) + \
+                "[{1}, type(None)], '{0} is neither {1} nor None'\n" \
+                .format(field, str(S2P[fd["type"].upper()]))
+
     # Create getters
     for field in structure.STRUCT[tbl]:
         camelField = structure.CamelCase(field)

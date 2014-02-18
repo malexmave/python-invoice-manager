@@ -9,8 +9,8 @@ def getByNo(ArticleNo):
     ArticleNo -- The article number, as integer
     
     Returns:
-    A dictionary of the Article attributes, or None if no article with that
-    number exists.
+    An Article object representing the currently active Article with that 
+    number, or None if no article with that number exists.
     """
     pass
 
@@ -24,7 +24,6 @@ def getByID(ArticleID):
     ArticleID -- The article ID, as integer
 
     Returns:
-    A dictionary of the Article attributes, or None if no articles with that
-    ID exist.
+    An Article object, or None if no articles with that ID exist.
     """
     pass

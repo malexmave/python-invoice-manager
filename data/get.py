@@ -1,11 +1,9 @@
 from data import connect
 
-def CustomerByNumer(number):
-    # query = "SELECT * FROM customers WHERE customer_no = %i AND active = TRUE;" % number
-    conn = connect.getConnection()
-    pass
-
-def ArticleByNumber(number):
-    # query = "SELECT * FROM articles WHERE article_no = %i AND active = TRUE;" % number
-    conn = connect.getConnection()
-    pass
+# TODO: Auto-generate this stuff.
+# Universal functions:
+# - {0}ByID(ID)
+# - {0}ByNumber(no)
+# - {0}HistoryByNumber(no)
+# - AllActive{0}()
+# - All{0}()

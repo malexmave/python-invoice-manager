@@ -1,17 +1,5 @@
 from data import connect
 
-def Customer(): # TODO: Parameters
-    cursor, conn = connect.getConnection()
-    pass
-
-def Article(): # TODO: Parameters
-    cursor, conn = connect.getConnection()
-    pass
-
-def Invoice(): # TODO: Parameters
-    cursor, conn = connect.getConnection()
-    pass
-
-def ItemToInvoice(): # TODO: Parameters
-    cursor, conn = connect.getConnection()
-    pass
+# TODO: Auto-generate this stuff
+# Universal functions:
+# - {0}({0})

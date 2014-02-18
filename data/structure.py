@@ -257,6 +257,14 @@ STRUCT = {
             "default": None,
             "foreignKey": None
         },
+        "shipping_add_nr" : {
+            "type": "INTEGER",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
         "customer_id":   {
             "type": "INTEGER",
             "notNull": True,
@@ -606,6 +614,14 @@ STRUCT = {
             "default": None,
             "foreignKey": None
         },
+        "element_no": {
+            "type": "INTEGER",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": None,
+            "foreignKey": None
+        },
         "invoice_no":      {
             "type": "INTEGER",
             "notNull": True,
@@ -619,7 +635,7 @@ STRUCT = {
                 "onUpd": "RESTRICT"
             }
         },
-        "invoice_element": {
+        "order_key": {
             "type": "INTEGER",
             "notNull": True,
             "primaryKey": False,
@@ -679,6 +695,14 @@ STRUCT = {
             "notNull": False,
             "primaryKey": True,
             "autoIncrement": True,
+            "default": None,
+            "foreignKey": None
+        },
+        "payment_no": {
+            "type": "INTEGER",
+            "notNull": True,
+            "primaryKey": False,
+            "autoIncrement": False,
             "default": None,
             "foreignKey": None
         },

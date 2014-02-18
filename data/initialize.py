@@ -192,7 +192,11 @@ def setup(dbfile):
             if cf["notNull"]:
                 stmt += "NOT NULL "
             if cf["default"] != None:
-                stmt += "DEFAULT %s " % str(cf["default"])
+                if type(cf["default"]) == str:
+                    iv = "'" + cf["default"] + "'"
+                else:
+                    iv = str(cf["default"])
+                stmt += "DEFAULT %s " % iv
             if cf["foreignKey"] != None:
                 fk = cf["foreignKey"]
                 stmt += "REFERENCES %s(%s) ON DELETE %s ON UPDATE %s " % \

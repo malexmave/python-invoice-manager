@@ -215,6 +215,14 @@ STRUCT = {
             "default": None,
             "foreignKey": None
         },
+        "discount":      {
+            "type": "INTEGER",
+            "notNull": False,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": 0,
+            "foreignKey": None
+        },
         "comment":       {
             "type": "TEXT",
             "notNull": False,
@@ -538,6 +546,14 @@ STRUCT = {
             "primaryKey": False,
             "autoIncrement": False,
             "default": None,
+            "foreignKey": None
+        },
+        "discount":      {
+            "type": "INTEGER",
+            "notNull": False,
+            "primaryKey": False,
+            "autoIncrement": False,
+            "default": 0,
             "foreignKey": None
         },
         "comment":       {

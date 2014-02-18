@@ -25,6 +25,7 @@ CREATE TABLE customer(
   phone TEXT,
   email TEXT,
   tax_no TEXT,
+  discount INTEGER DEFAULT 0,
   comment TEXT,
   last_modified INTEGER NOT NULL,
   active BOOLEAN DEFAULT TRUE NOT NULL
@@ -73,6 +74,7 @@ CREATE TABLE invoice(
   customer_id INTEGER NOT NULL REFERENCES customer(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   company_id INTEGER NOT NULL REFERENCES company_data(ID) ON DELETE RESTRICT ON UPDATE RESTRICT,
   payment_due INTEGER NOT NULL,
+  discount INTEGER DEFAULT 0,
   comment TEXT,
   finalized BOOLEAN NOT NULL,
   paid BOOLEAN DEFAULT FALSE NOT NULL,

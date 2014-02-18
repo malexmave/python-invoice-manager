@@ -47,14 +47,13 @@ def checkConformity(dbfile):
                 resdict[element[3]]["fkey_table"] = element[2]
                 resdict[element[3]]["fkey_field"] = element[4]
             for field in structure.STRUCT[tbl]:
+                fd = structure.STRUCT[tbl][field]
                 try:
-                    if resdict[field]["type"] == \
-                      structure.STRUCT[tbl][field]["type"]:
+                    if resdict[field]["type"] == fd["type"]:
                         # Field exists and has the correct type
                         # Check for foreign keys
-                        if structure.STRUCT[tbl][field]["foreignKey"] \
-                            != None:
-                            fk = structure.STRUCT[tbl][field]["foreignKey"]
+                        if fd["foreignKey"] != None:
+                            fk = fd["foreignKey"]
                             assert resdict[field]["is_fkey"], \
                                 "%s.%s: Should not be a foreign key" % \
                                 (tbl, field)
@@ -74,15 +73,13 @@ def checkConformity(dbfile):
                         raise InvalidDatabaseStructureException(
                             "Field %s in table %s has type %s (should be %s)"
                             % (field, tbl, resdict[field]["type"],
-                               structure.STRUCT[tbl][field][0]))
+                               fd[0]))
                 except KeyError:
                     raise InvalidDatabaseStructureException(
-                        "Field %s does not exist in table %s." \
-                        % (field, tbl))
+                        "Field %s does not exist in table %s." % (field, tbl))
                 except AssertionError, e:
                     raise InvalidDatabaseStructureException(
-                        "Incorrect foreign key on %s: %s."
-                        % (field, str(e)))
+                        "Incorrect foreign key on %s: %s." % (field, str(e)))
         else:
             raise InvalidDatabaseStructureException("Table '%s' does not exist." % tbl)
 

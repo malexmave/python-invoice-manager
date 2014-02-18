@@ -115,21 +115,12 @@ for tbl in structure.STRUCT:
 """.format(camelTbl)
     for field in structure.STRUCT[tbl]:
         fd = structure.STRUCT[tbl][field]
-        if structure.SQL_TO_PY_TYPE[fd["type"]] == "int":
-            cd += """
-        try:
-            bu = {0}._{1} 
-            {0}._{1} = "{2}"
-            {0}.checkRep()
-            rv = 1
-        except AssertionError:
-            {0}._{1} = bu
-        finally:
-            if rv == 1:
-                self.fail('{0} checkRep did not detect error on {1}')
-""".format(camelTbl, field, randomString())
-        elif structure.SQL_TO_PY_TYPE[fd["type"]] == "str":
-            cd += """
+        S2P = structure.SQL_TO_PY_TYPE
+        if S2P[fd["type"]] != "str":
+            val = '"' + randomString() + '"' 
+        else: 
+            val = randint(1,1000)
+        cd += """
         try:
             bu = {0}._{1} 
             {0}._{1} = {2}
@@ -140,33 +131,7 @@ for tbl in structure.STRUCT:
         finally:
             if rv == 1:
                 self.fail('{0} checkRep did not detect error on {1}')
-""".format(camelTbl, field, randint(1,1000))
-        elif structure.SQL_TO_PY_TYPE[fd["type"]] == "bool":
-            cd += """
-        try:
-            bu = {0}._{1} 
-            {0}._{1} = "{2}"
-            {0}.checkRep()
-            rv = 1
-        except AssertionError:
-            {0}._{1} = bu
-        finally:
-            if rv == 1:
-                self.fail('{0} checkRep did not detect error on {1}')
-""".format(camelTbl, field, randomString())
-        elif structure.SQL_TO_PY_TYPE[fd["type"]] == "float":
-            cd += """
-        try:
-            bu = {0}._{1} 
-            {0}._{1} = "{2}"
-            {0}.checkRep()
-            rv = 1
-        except AssertionError:
-            {0}._{1} = bu
-        finally:
-            if rv == 1:
-                self.fail('{0} checkRep did not detect error on {1}')
-""".format(camelTbl, field, randomString())
+""".format(camelTbl, field, val) 
 
 # Evaluate resulting string to generate tests for datatypes
 exec cd

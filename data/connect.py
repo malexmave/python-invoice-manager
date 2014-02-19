@@ -1,4 +1,6 @@
+from cache import db
 import sqlite3
+
 
 def isSQLite3(filename):
     from os.path import isfile, getsize
@@ -17,13 +19,19 @@ def isSQLite3(filename):
         else:
             return 2
 
-def getConnection(dbfile, create=False):
+def getConnection():
+    if db._cur and db._con:
+        return (db._cur, db._con)
+    else:
+        raise AssertionError("No open connection found.")
+
+def openConnection(dbfile, create=False):
     fs = isSQLite3(dbfile)
     if fs == 0 or (fs == 1 and create):
-        conn = sqlite3.connect(dbfile)
-        cursor = conn.cursor()
-        cursor.execute("PRAGMA foreign_keys = ON;")
-        conn.commit()  # Not sure if this is needed
-        return (cursor, conn)
+        db._con = sqlite3.connect(dbfile)
+        db._cur = db._con.cursor()
+        db._cur.execute("PRAGMA foreign_keys = ON;")
+        db._con.commit()  # Not sure if this is needed
+        return True
     else:
         raise AssertionError("File exists and is invalid SQLite file.")

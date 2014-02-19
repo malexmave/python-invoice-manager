@@ -72,7 +72,6 @@ class DBSpecifications(unittest.TestCase):
     def testDBSpec_fkeys(self):
         data.initialize.testDBSpec_fkeys()
 
-
     def testDBSpec_types(self):
         data.initialize.testDBSpec_types()
 

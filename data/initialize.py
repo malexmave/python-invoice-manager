@@ -179,7 +179,7 @@ def setup(dbfile):
         a SQL statement was incorrect.
     """
     validateDBDefinition()
-    cursor, conn = connect.getConnection(dbfile)
+    cursor, conn = connect.getConnection(dbfile, create=True)
     for tbl in structure.STRUCT:
         stmt = "CREATE TABLE %s(" % tbl
         for field in structure.STRUCT[tbl]:

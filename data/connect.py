@@ -17,8 +17,9 @@ def isSQLite3(filename):
         else:
             return 2
 
-def getConnection(dbfile):
-    if isSQLite3(dbfile) in (0, 1):
+def getConnection(dbfile, create=False):
+    fs = isSQLite3(dbfile)
+    if fs == 0 or (fs == 1 and create):
         conn = sqlite3.connect(dbfile)
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON;")

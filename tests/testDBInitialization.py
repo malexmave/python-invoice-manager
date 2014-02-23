@@ -23,6 +23,8 @@ class DBGeneration(unittest.TestCase):
     def setUp(self):
         self.testfilename = "test." + ''.join(random.choice(
             string.ascii_lowercase + string.digits) for x in range(8)) + ".db"
+        self.testfilename2 = "test." + ''.join(random.choice(
+            string.ascii_lowercase + string.digits) for x in range(8)) + ".db"
 
     def testDBGeneration(self):
         if not os.path.isfile(self.testfilename):
@@ -32,34 +34,34 @@ class DBGeneration(unittest.TestCase):
             try:
                 data.initialize.setup(self.testfilename)
             except Exception, e:
-                try:
-                    os.remove(self.testfilename)
-                except OSError:
-                    pass
+            #    try:
+            #        os.remove(self.testfilename)
+            #    except OSError:
+            #        pass
                 self.fail('An exception occured: ' + str(e))
             assert data.connect.isSQLite3(self.testfilename) == 0, \
                 "isSQLite3: Valid SSQLite3 not detected"
             try:
                 data.initialize.checkConformity(self.testfilename)
             except Exception, e:
-                try:
-                    os.remove(self.testfilename)
-                except OSError:
-                    pass
+            #    try:
+            #        os.remove(self.testfilename)
+            #    except OSError:
+            #        pass
                 self.fail('An exception occured: ' + str(e))
-            with open(self.testfilename, "w") as fo:
+            with open(self.testfilename2, "w") as fo:
                 fo.write(''.join(random.choice(string.ascii_lowercase + 
                     string.digits) for x in range(200)))
-            assert data.connect.isSQLite3(self.testfilename) == 2, \
+            assert data.connect.isSQLite3(self.testfilename2) == 2, \
                 "isSQLite3: Invalid SQLite3 not detected."
             try:
-                data.initialize.setup(self.testfilename)
+                data.initialize.setup(self.testfilename2)
                 rv = 1
             except AssertionError:
                 rv = 0
             if rv == 1:
                 self.fail("Setup: No fail on invalid db file")
-            try:
-                os.remove(self.testfilename)
-            except OSError:
-                pass
+            # try:
+            #     os.remove(self.testfilename)
+            # except OSError:
+            #     pass

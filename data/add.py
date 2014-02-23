@@ -1,9 +1,5 @@
 from data import structure
 
-# TODO: Auto-generate this stuff
-# Universal functions:
-# - {0}({0})
-
 s = structure.STRUCT
 cd = "from data import connect, datatype\n\n"
 
@@ -19,7 +15,7 @@ for tbl in s:
             fd = s[tbl][field]
             cField = structure.CamelCase(field)
             cd += " "*4 + "if {0}.get{1}() != None:\n".format(cTbl, cField)
-            cd += " "*8 + "qfields[{0}] = {1}.get{2}()\n".format(field, cTbl, 
+            cd += " "*8 + "qfields['{0}'] = {1}.get{2}()\n".format(field, cTbl, 
                 cField)
     cd += " "*4 + "stmt = 'INSERT INTO {0} ('\n".format(tbl)
     cd += " "*4 + "vals = ''\n"

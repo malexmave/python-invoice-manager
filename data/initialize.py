@@ -109,6 +109,7 @@ def testDBSpec_options():
 
 def testDBSpec_fkeys():
     VALID_CONSTRAINTS = ["UPDATE", "DELETE", "CASCADE", "RESTRICT"]
+    VALID_REV_HANDLE  = ["COPY", "IGNORE"]
     s = structure.STRUCT
     for tbl in s:
         for field in s[tbl]:
@@ -129,10 +130,15 @@ def testDBSpec_fkeys():
                     assert type(fk["onUpd"]) == str, \
                         "%s.%s: onUpd choice should be string" % \
                         (tbl, field)
+                    assert type(fk["onRev"]) == str, \
+                        "%s.%s: onRev choice should be string" % \
+                        (tbl, field)
                     assert fk["onDel"].upper() in VALID_CONSTRAINTS, \
                         "%s.%s: Invalid constraints" % (tbl, field)
                     assert fk["onUpd"].upper() in VALID_CONSTRAINTS, \
                         "%s.%s: Invalid constraints" % (tbl, field)
+                    assert fk["onRev"].upper() in VALID_REV_HANDLE, \
+                        "%s.%s: Invalid revision handling." % (tbl, field)
                     
                     # Semantic Checks
                     assert fk["table"] in s, \

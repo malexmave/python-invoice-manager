@@ -25,7 +25,8 @@ import re
 #     "table": TABLENAME,
 #     "field": FIELDNAME,
 #     "onDel": [UPDATE|DELETE|CASCADE|RESTRICT],
-#     "onUpd": [UPDATE|DELETE|CASCADE|RESTRICT]
+#     "onUpd": [UPDATE|DELETE|CASCADE|RESTRICT],
+#     "onRev": [COPY|IGNORE]
 # }
 STRUCT = {
     "article": {
@@ -275,7 +276,8 @@ STRUCT = {
                 "table": "customer",
                 "field": "ID",
                 "onDel": "RESTRICT",
-                "onUpd": "RESTRICT"
+                "onUpd": "RESTRICT",
+                "onRev": "COPY"
             }
         },
         "company":       {
@@ -532,7 +534,8 @@ STRUCT = {
                 "table": "customer",
                 "field": "ID",
                 "onDel": "RESTRICT",
-                "onUpd": "RESTRICT"
+                "onUpd": "RESTRICT",
+                "onRev": "COPY"
             }
         },
         "company_id":    {
@@ -545,7 +548,8 @@ STRUCT = {
                 "table": "company_data",
                 "field": "ID",
                 "onDel": "RESTRICT",
-                "onUpd": "RESTRICT"
+                "onUpd": "RESTRICT",
+                "onRev": "IGNORE"
             }
         },
         "payment_due":   {
@@ -632,7 +636,8 @@ STRUCT = {
                 "table": "invoice",
                 "field": "ID",
                 "onDel": "RESTRICT",
-                "onUpd": "RESTRICT"
+                "onUpd": "RESTRICT",
+                "onRev": "COPY"
             }
         },
         "order_key": {
@@ -653,7 +658,8 @@ STRUCT = {
                 "table": "article",
                 "field": "ID",
                 "onDel": "RESTRICT",
-                "onUpd": "RESTRICT"
+                "onUpd": "RESTRICT",
+                "onRev": "IGNORE"
             }
         },
         "amount":          {
@@ -716,7 +722,8 @@ STRUCT = {
                 "table": "invoice",
                 "field": "ID",
                 "onDel": "RESTRICT",
-                "onUpd": "RESTRICT"
+                "onUpd": "RESTRICT",
+                "onRev": "COPY"
             }
         },
         "payment_amount": {

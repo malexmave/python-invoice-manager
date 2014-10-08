@@ -112,7 +112,7 @@ while set(s.keys()) - set(order) != set([]):
         for element in toRemove:
             unprocessed.remove(element)
 
-cd = """from data import add, datatype
+cd = """from data import add, edit, datatype
 import unittest
 """
 
@@ -170,6 +170,9 @@ for tbl in order:
     def testAdd{0}(self):
         self.{0} = datatype.{0}(self.template)
         add.{0}(self.{0})
+        self.{0}b = datatype.{0}(self.template)
+        self.{0}b._active = False
+        edit.{0}(self.{0}b)
 
 """.format(cTbl)
 
